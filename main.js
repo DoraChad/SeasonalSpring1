@@ -1,5 +1,6 @@
-const proxyURL = ["https://polyproxy.orangywastaken.workers.dev/v6/leaderboard?version=0.6.0-beta3&trackId=", "&skip=0&amount=200&onlyVerified=false"]
-const trackIds = ["835e67c5949e2506ef87026801600a325c1c0f7367e10102640a1906c067735a", "51c7265ecfcb22d1144f6eb3fb0843e32afa2f86a2125dfd70453dc682ebc359", "d48294e4de5d8e606c0c29769cdb69cbbb02828022bc142a3e60570fa91defd5", "473408bd53696e4ee0e76b6f6101812ed967696c24fd08f740afabe946f2bce0", "e03503f8445fe7164ce7fe278cfc7f0c0fca4d21c11c701774f5fa1297a72805"]
+const proxyURL = ["https://polyproxy.orangywastaken.workers.dev/leaderboard?version=0.6.0&trackId=", "&skip=0&amount=200&onlyVerified=false"]
+const trackIds = ["76e1920a3ca015033a0b21156848def2c248c95d97ccf4aab2312a0302beefe0", "a8132c5e2df877f86572476a14b24fedc5da0892d3136b1e8f0fad33013e829a", "4058e3616fbd79b848e70037adde4f12b4413011050aaf1c9d875cdbe2e33d68", "e65c13f972d370cae9c61c5c7dd53708c9328377b7db32000ebefeb64c9687d6", "dd7b5489ba2dc8691e713d7da5e25ea631d96183a7b9919556122898badda291", "3aa3612c79907e98105d9930b28172d25df7a0930ccaf0c3f096eb4d8e42400c", "064b75893da97ced0c44841f4ef2197c4c4e8c70fe75006e7fa538dbf37feccb", "c033a1a0805db87e0f040a12af1c387dda9b86611274fc82a88d7768ac168ef3", "aa421a6e2097e73cd34c3f580a6a68793aa927c7ade5520601879c6fb25b3b4e", "8ba04773833d77c33733fad05fdfc88b238bafe6013e1377238054a19ceab7bc`"]
+const numberOfTracks = 10
 
 const saveVariableToFile = function(data, filename = "data.json") {
     const json = JSON.stringify(data, null, 2);
@@ -15,7 +16,7 @@ const saveVariableToFile = function(data, filename = "data.json") {
 }
 
 async function loadVariableFromGitHub(url) {
-    const response = await fetch(`https://raw.githubusercontent.com/DoraChad/BBBB/refs/heads/main/${url}`);
+    const response = await fetch(`https://raw.githubusercontent.com/DoraChad/SeasonalSpring1/refs/heads/main/${url}`);
 
     if (!response.ok) {
         throw new Error(`Failed to fetch file: ${response.status}`);
@@ -42,7 +43,7 @@ function popup(message) {
 }
 
 async function copyFileToClipboard(trackNum) {
-    url = `https://raw.githubusercontent.com/DoraChad/BBBB/refs/heads/main/tracks/${trackNum}.track`;
+    url = `https://raw.githubusercontent.com/DoraChad/SeasonalSpring1/refs/heads/main/tracks/${trackNum}.track`;
     try {
         const res = await fetch(url);
         if (!res.ok) throw new Error('Failed to fetch file');
@@ -64,8 +65,29 @@ async function fetchLeaderboard(trackNumber) {
     return res.json();
 }
 
-async function getFullLeaderboards(totalTracks = 5) {
-    return await loadVariableFromGitHub("data.json");
+async function getFullLeaderboards(totalTracks = numberOfTracks) {
+    const leaderboards = [];
+
+    for (let trackIndex = 0; trackIndex < totalTracks; trackIndex++) {
+        const lb = await fetchLeaderboard(trackIndex);
+        leaderboards.push(lb);
+    }
+
+    const playerData = {};
+
+    leaderboards.forEach((lb, trackIndex) => {
+        lb.entries.forEach((entry, pos) => {
+            if (!playerData[entry.userId]) {
+            playerData[entry.userId] = {
+                nickname: entry.nickname,
+                placements: Array(totalTracks).fill(null)
+            };
+            }
+            playerData[entry.userId].placements[trackIndex] = pos + 1;
+        });
+    });
+
+    return playerData;
 }
 
 function calculatePoints(playerMap) {
@@ -108,10 +130,17 @@ const lbDiv = document.createElement("div");
 lbDiv.className = "lb-div";
 UI.appendChild(lbDiv);
 
+
+const subTitle = document.createElement("p")
+subTitle.textContent = "Seasonal Tournament";
+subTitle.style.fontSize = "30px";
+subTitle.style.margin = "15px";
+headDiv.appendChild(subTitle);
+
 const title = document.createElement("p")
-title.textContent = "Bonnie Beans Birthday Bash";
+title.textContent = "Spring 1";
 title.style.fontSize = "60px";
-title.style.margin = "40px";
+title.style.margin = "0";
 headDiv.appendChild(title);
 
 const lbTitle = document.createElement("p")
@@ -124,14 +153,27 @@ const leaderboard = document.createElement("div");
 leaderboard.className = "leaderboard";
 lbDiv.appendChild(leaderboard);
 
-for (let i = 1; i <= 5; i++) {
+let doubleDiv;
+for (let i = 1; i <= numberOfTracks; i++) {
+
+    if ((i - 1) % 2 === 0) {
+        doubleDiv = document.createElement("div");
+        doubleDiv.className = "double-div";
+    }
+
     const track = document.createElement("button");
     track.addEventListener("click", () => {
         copyFileToClipboard(i);
-    })
+    });
+
     track.className = "track";
-    track.style.backgroundImage = `url("https://raw.githubusercontent.com/DoraChad/BBBB/refs/heads/main/images/BBBB_Graphics_${i}a.jpg")`
-    tracksDiv.appendChild(track);
+    track.style.backgroundImage = `url("https://raw.githubusercontent.com/DoraChad/SeasonalSpring1/refs/heads/main/images/WireFrames_MapTile_${i}.jpg")`;
+
+    doubleDiv.appendChild(track);
+
+    if (i % 2 === 0 || i === numberOfTracks) {
+        tracksDiv.appendChild(doubleDiv);
+    }
 }
 
 (async () => {
