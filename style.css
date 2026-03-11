@@ -57,13 +57,18 @@ p {
 }
 
 .track {
-    width: 48%;
-    flex-shrink: 0;
+    width: 100%;
     cursor: pointer;
     background-size: cover;
     border: none;
-    aspect-ratio: 2 / 1;
+    aspect-ratio: 3 / 2;
     border-radius: 5px;
+}
+
+.entry-div {
+    width: 48%;
+    flex-shrink: 0;
+    position: relative;
 }
 
 .lb-div {
