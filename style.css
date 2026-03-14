@@ -39,6 +39,9 @@ p {
     cursor: pointer;
     pointer-events: auto;
 }
+.leaderboard-tab-button.selected {
+    background: #334b77;
+}
 
 .head-div {
     text-align: center;
@@ -113,6 +116,10 @@ p {
     align-items: center;
     overflow-y: scroll;
     overflow-x: hidden;
+}
+
+.leaderboard.hidden {
+    display: none;
 }
 
 .leaderboard-entry {

@@ -1,11 +1,13 @@
-const div1 = loadVariableFromGitHub("ids/div1.json");
-const div2 = loadVariableFromGitHub("ids/div2.json");
+let div1;
+let div2;
+let squads;
+const lbButtonsArray = [];
 
-const proxyURL = ["https://polyproxy.polymodloader.com/leaderboard?version=0.6.0&trackId=", "&skip=0&amount=200&onlyVerified=false"]
-const trackIds = ["76e1920a3ca015033a0b21156848def2c248c95d97ccf4aab2312a0302beefe0", "a8132c5e2df877f86572476a14b24fedc5da0892d3136b1e8f0fad33013e829a", "4058e3616fbd79b848e70037adde4f12b4413011050aaf1c9d875cdbe2e33d68", "e65c13f972d370cae9c61c5c7dd53708c9328377b7db32000ebefeb64c9687d6", "dd7b5489ba2dc8691e713d7da5e25ea631d96183a7b9919556122898badda291", "3aa3612c79907e98105d9930b28172d25df7a0930ccaf0c3f096eb4d8e42400c", "064b75893da97ced0c44841f4ef2197c4c4e8c70fe75006e7fa538dbf37feccb", "c033a1a0805db87e0f040a12af1c387dda9b86611274fc82a88d7768ac168ef3", "aa421a6e2097e73cd34c3f580a6a68793aa927c7ade5520601879c6fb25b3b4e", "8ba04773833d77c33733fad05fdfc88b238bafe6013e1377238054a19ceab7bc`"]
+const proxyURL = ["https://polyproxy.polymodloader.com/v6/leaderboard?version=0.6.0&trackId=", "&skip=0&amount=200&onlyVerified=false"]
+const trackIds = ["76e1920a3ca015033a0b21156848def2c248c95d97ccf4aab2312a0302beefe0", "a8132c5e2df877f86572476a14b24fedc5da0892d3136b1e8f0fad33013e829a", "4058e3616fbd79b848e70037adde4f12b4413011050aaf1c9d875cdbe2e33d68", "e65c13f972d370cae9c61c5c7dd53708c9328377b7db32000ebefeb64c9687d6", "dd7b5489ba2dc8691e713d7da5e25ea631d96183a7b9919556122898badda291", "3aa3612c79907e98105d9930b28172d25df7a0930ccaf0c3f096eb4d8e42400c", "064b75893da97ced0c44841f4ef2197c4c4e8c70fe75006e7fa538dbf37feccb", "b09369279a5e461eb03e69fbeb48d43586bcbc68888936417ac751147a446431", "aa421a6e2097e73cd34c3f580a6a68793aa927c7ade5520601879c6fb25b3b4e", "8ba04773833d77c33733fad05fdfc88b238bafe6013e1377238054a19ceab7bc"]
 const numberOfTracks = 16;
 const lockedTracks = 10;
-const leaderboardTabs = ["Div 1", "Div 2", "Squards", "Unregistered"]
+const leaderboardTabs = ["Div 1", "Div 2", "Squads", "Unregistered"]
 const trackData = {
     names: [
         "Star Bound",
@@ -94,18 +96,18 @@ async function copyFileToClipboard(trackNum) {
 
 async function fetchLeaderboard(trackNumber) {
     const url = `${proxyURL[0]}${trackIds[trackNumber]}${proxyURL[1]}`;
-    //const res = await fetch(url);
+    const res = await fetch(url);
     if (!res.ok) throw new Error(`Failed to fetch: ${url}`);
     return res.json();
 }
 
-async function getFullLeaderboards(totalTracks = numberOfTracks) {
-    const leaderboards = [];
-
+async function getFullLeaderboards(totalTracks = lockedTracks) {
+    const promises = [];
     for (let trackIndex = 0; trackIndex < totalTracks; trackIndex++) {
-        const lb = await fetchLeaderboard(trackIndex);
-        leaderboards.push(lb);
+        promises.push(fetchLeaderboard(trackIndex));
     }
+
+    const leaderboards = await Promise.all(promises);
 
     const playerData = {};
     const WRs = {};
@@ -128,21 +130,14 @@ async function getFullLeaderboards(totalTracks = numberOfTracks) {
         });
     });
 
-    return playerData, WRs;
+    return { playerData, WRs };
 }
 
-function filterPlayers(playerMap, playerIds) {
-    const filtered = {};
+function filterPlayers(playerArray, playerIds) {
     const idSet = new Set(playerIds);
-
-    for (const id in playerMap) {
-        if (idSet.has(id)) {
-            filtered[id] = playerMap[id];
-        }
-    }
-
-    return filtered;
+    return playerArray.filter(player => idSet.has(player.userId));
 }
+
 
 function pointFormula(place, time, WR) {
     let points;
@@ -151,14 +146,17 @@ function pointFormula(place, time, WR) {
         return calculationConstants.maxPoints * 1.1;
     }
 
-    points = calculationConstants.maxPoints * ((1/((Math.E) ** (50/(Math.sqrt(WR))))) ** ((time - WR)/(WR)))
+    points = calculationConstants.maxPoints * ((1/((Math.E) ** (500/(Math.sqrt(WR))))) ** ((time - WR)/(WR)))
 
     if (points <= 0) points = 0;
 
     return points;
 }
 
-function calculatePoints(playerMap, WRs) {
+function calculatePoints(data) {
+    const playerMap = data.playerData;
+    const WRs = data.WRs;
+
     const playersWithPoints = [];
 
     for (const userId in playerMap) {
@@ -167,7 +165,7 @@ function calculatePoints(playerMap, WRs) {
         let points = 0;
         player.placements.forEach((place, pos) => {
             if (place === null) return;
-            points += pointFormula(place, player.times[pos], WRs[pos]);
+            points += pointFormula(place, player.times[pos] / 1000, WRs[pos] / 1000);
         });
 
         playersWithPoints.push({
@@ -179,10 +177,58 @@ function calculatePoints(playerMap, WRs) {
 
     playersWithPoints.sort((a, b) => b.points - a.points);
 
-    console.log(filterPlayers(playersWithPoints, div1));
-    console.log(filterPlayers(playersWithPoints, div2));
 
     return playersWithPoints;
+}
+
+function calculateTeams() {
+    for (team of squads) {
+        console.log(team);
+    }
+}
+
+function switchTab(tab) {
+    if (tab === "Div 1") {
+        leaderboardDiv1.classList.remove("hidden");
+        leaderboardDiv2.classList.add("hidden");
+        leaderboardSquads.classList.add("hidden");
+        leaderboardAll.classList.add("hidden");
+
+        lbButtonsArray[0].classList.add("selected");
+        lbButtonsArray[1].classList.remove("selected");
+        lbButtonsArray[2].classList.remove("selected");
+        lbButtonsArray[3].classList.remove("selected");
+    } else if (tab === "Div 2") {
+        leaderboardDiv1.classList.add("hidden");
+        leaderboardDiv2.classList.remove("hidden");
+        leaderboardSquads.classList.add("hidden");
+        leaderboardAll.classList.add("hidden");
+
+        lbButtonsArray[0].classList.remove("selected");
+        lbButtonsArray[1].classList.add("selected");
+        lbButtonsArray[2].classList.remove("selected");
+        lbButtonsArray[3].classList.remove("selected");
+    } else if (tab === "Squads") {
+        leaderboardDiv1.classList.add("hidden");
+        leaderboardDiv2.classList.add("hidden");
+        leaderboardSquads.classList.remove("hidden");
+        leaderboardAll.classList.add("hidden");
+
+        lbButtonsArray[0].classList.remove("selected");
+        lbButtonsArray[1].classList.remove("selected");
+        lbButtonsArray[2].classList.add("selected");
+        lbButtonsArray[3].classList.remove("selected");
+    } else {
+        leaderboardDiv1.classList.add("hidden");
+        leaderboardDiv2.classList.add("hidden");
+        leaderboardSquads.classList.add("hidden");
+        leaderboardAll.classList.remove("hidden");
+
+        lbButtonsArray[0].classList.remove("selected");
+        lbButtonsArray[1].classList.remove("selected");
+        lbButtonsArray[2].classList.remove("selected");
+        lbButtonsArray[3].classList.add("selected");
+    }
 }
 
 const UI = document.createElement("div");
@@ -227,13 +273,32 @@ lbDiv.appendChild(lbButtonDiv);
 for (let i = 0; i < leaderboardTabs.length; i++) {
     const lbButton = document.createElement("button");
     lbButton.className = "leaderboard-tab-button";
+    if (i === 0) {
+        lbButton.classList.add("selected")
+    }
     lbButton.appendChild(document.createTextNode(leaderboardTabs[i]));
+    lbButton.addEventListener("click", () => {
+        switchTab(leaderboardTabs[i])
+    })
+    lbButtonsArray.push(lbButton);
     lbButtonDiv.appendChild(lbButton);
 }
 
-const leaderboard = document.createElement("div");
-leaderboard.className = "leaderboard";
-lbDiv.appendChild(leaderboard);
+const leaderboardDiv1 = document.createElement("div");
+leaderboardDiv1.className = "leaderboard hidden";
+lbDiv.appendChild(leaderboardDiv1);
+
+const leaderboardDiv2 = document.createElement("div");
+leaderboardDiv2.className = "leaderboard hidden";
+lbDiv.appendChild(leaderboardDiv2);
+
+const leaderboardSquads = document.createElement("div");
+leaderboardSquads.className = "leaderboard hidden";
+lbDiv.appendChild(leaderboardSquads);
+
+const leaderboardAll = document.createElement("div");
+leaderboardAll.className = "leaderboard";
+lbDiv.appendChild(leaderboardAll);
 
 let doubleDiv;
 for (let i = 1; i <= numberOfTracks; i++) {
@@ -288,7 +353,14 @@ for (let i = 1; i <= numberOfTracks; i++) {
 }
 
 (async () => {
-    calculatePoints(await getFullLeaderboards()).forEach((player, placement) => {
+    div1 = await loadVariableFromGitHub("ids/div1.json");
+    div2 = await loadVariableFromGitHub("ids/div2.json");
+    squads = await loadVariableFromGitHub("ids/teams.json");
+
+
+    const fullData = calculatePoints(await getFullLeaderboards())
+
+    Object.values(filterPlayers(fullData, div1)).forEach((player, placement) => {
         const entry = document.createElement("div");
         entry.className = "leaderboard-entry";
 
@@ -299,12 +371,53 @@ for (let i = 1; i <= numberOfTracks; i++) {
         entry.appendChild(name);
 
         const points = document.createElement("p");
-        points.textContent = Math.round(player.points*1000)/1000;
+        points.textContent = Math.round(player.points * 1000) / 1000;
         points.style.fontSize = "25px";
         points.style.marginLeft = "auto";
         points.style.marginRight = "10px";
         entry.appendChild(points);
 
-        leaderboard.appendChild(entry);
+        leaderboardDiv1.appendChild(entry);
     });
+
+    Object.values(filterPlayers(fullData, div2)).forEach((player, placement) => {
+        const entry = document.createElement("div");
+        entry.className = "leaderboard-entry";
+
+        const name = document.createElement("p");
+        name.textContent = `${placement + 1}. ${player.nickname}`;
+        name.style.fontSize = "25px";
+        name.style.marginLeft = "10px";
+        entry.appendChild(name);
+
+        const points = document.createElement("p");
+        points.textContent = Math.round(player.points * 1000) / 1000;
+        points.style.fontSize = "25px";
+        points.style.marginLeft = "auto";
+        points.style.marginRight = "10px";
+        entry.appendChild(points);
+
+        leaderboardDiv2.appendChild(entry);
+    });
+
+    fullData.forEach((player, placement) => {
+        const entry = document.createElement("div");
+        entry.className = "leaderboard-entry";
+
+        const name = document.createElement("p");
+        name.textContent = `${placement + 1}. ${player.nickname}`;
+        name.style.fontSize = "25px";
+        name.style.marginLeft = "10px";
+        entry.appendChild(name);
+
+        const points = document.createElement("p");
+        points.textContent = Math.round(player.points * 1000) / 1000;
+        points.style.fontSize = "25px";
+        points.style.marginLeft = "auto";
+        points.style.marginRight = "10px";
+        entry.appendChild(points);
+
+        leaderboardAll.appendChild(entry);
+    });
+
 })();

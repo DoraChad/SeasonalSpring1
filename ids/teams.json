@@ -1,0 +1,54 @@
+{
+    "OCO": {
+        "color": "darkgreen",
+        "members": ["1066c1559ddb647b28741a0352f800f80300b6bb97c23290cc03b1d1f53e131a", "026067ac279d672010bc4b6cec72931098d028c5690de59008750a4141de2e82", "67f9d6a942d829fa8d63ab9e3c381f811ba22dd6f7d9318393075bff3fa7d74c"]
+    },
+    "SLO": {
+        "color": "darkblue",
+        "members": ["4e172e424c5817e62ff069cadd9aee6efb5413fecea17b4192156e7f13e818ff", "b99c6507a9b402c7ea6f7bce3a8410c033f8aca770e66ede2afea07cd95e1036"]
+    },
+    "DDM": {
+        "color": "sandybrown",
+        "members": ["db767b1a8c1f851a28029fa81af010300fac4b9040571562ed5fe4ca980aea5f", "9881408813de87d25e6c83af6bc01cc63d1fa07e6152b658a605d6f189282a45", "ffc17848c9c00d48b1acadc9a4622ebd3f84e2f3575308be4f06d8f8f93e26eb"]
+    },
+    "MLT": {
+        "color": "red",
+        "members": ["7b0b9f1e5ff3541a646373f7e6c89840dca2f6a3add563958e81587ff075fe7e", "c7bc79a70ad80f5d7b072ff55800d4730ae6738fa9ebd06dcd036dcfefc17453"]
+    },
+    "NPA": {
+        "color": "cornflowerblue",
+        "members": ["2f12c158fc8658edacf24dddcf30d287ba67792d7a4c29f563f1d5aacc5066d6", "f444038e262dc4b720aaefa5f6ebcc878a932c8d91e03d9a985767f274d1ec28", "7fe8432901c3dcb0ece730f65ad2ff07adedfc2f921753d43b52b96b6353b0dc"]
+    },
+    "PIO": {
+        "color": "green",
+        "members": ["7f2e6c666e21ade84730dbfe89234782a8cb826fe34e7d990bfb2afec2da6270", "0267ddad29abd9f0cc913148633030f01247f98f07c335a568381d719ddf4e4e", "96790b837bafefaa4e37fa1e4d6a57a009293323b32c94ef4ffe40130c5745b4"]
+    },
+    "PHC": {
+        "color": "royalblue",
+        "members": ["b7780e98f75709530ea96f5101ae4daf304bb3e74c02526ce0600a66be7d665a", "6591e36d64a73f1b12a62ff2ef829d906b10170db4b6660e7a74022839f9582f"]
+    },
+    "ROH": {
+        "color": "darkred",
+        "members": ["d2538751e78f0edeeda9c210fe956f2d8d46c018053882dbf410666e4ce4a00d", "e87480caf98740690b7ee8ad36494e75e8d640a3634bc0e222934bb57daba425"]
+    },
+    "SPM": {
+        "color": "teal",
+        "members": []
+    },
+    "HUT": {
+        "color": "orange",
+        "members": ["ff42b75d8758d93d930b5233e1acc7c897beca8a8b551d0800984fb2962308ad", "2e36df5c0359e01c637eb7de53219c14bcf69d4ba8f98dd891bbc08466a9e9d1"]
+    },
+    "XIQ": {
+        "color": "pink",
+        "members": ["216e7921a9b39389aaad75b4e59571f4f759764d9092c526cf921f25cfff8eed", "93bea4f8a4a3971884a83d861bd1721141f0edd7c7ff22959601be245957d11d"]
+    },
+    "ZSL": {
+        "color": "yellow",
+        "members": ["0580e4651cd204935bdf05a26cd661b5ef8b178e2ad83cd4b649cdcb821d550f"]
+    },
+    "ZPR": {
+        "color": "white",
+        "members": ["37bd1c4319e0ed2985d0f95641c0813c09a894953c8bae174f620fb722be3624", "a4d01f719ba01eaacbdbe946805c731ceaae8431c3f9dab3febbfdd815816681", "f908d59af5b331a993f0095b6ca89883774b3823ace7cbe107b0f351d06c3697"]
+    }
+}
