@@ -5,7 +5,7 @@
     },
     "SLO": {
         "color": "darkblue",
-        "members": ["4e172e424c5817e62ff069cadd9aee6efb5413fecea17b4192156e7f13e818ff", "b99c6507a9b402c7ea6f7bce3a8410c033f8aca770e66ede2afea07cd95e1036"]
+        "members": ["4e172e424c5817e62ff069cadd9aee6efb5413fecea17b4192156e7f13e818ff", "b99c6507a9b402c7ea6f7bce3a8410c033f8aca770e66ede2afea07cd95e1036", "e578b94eeedd9874dbc3c6d959cc39628df19f3f5067e549fd06dc5d888521a5"]
     },
     "DDM": {
         "color": "sandybrown",
@@ -33,19 +33,19 @@
     },
     "SPM": {
         "color": "teal",
-        "members": []
+        "members": ["92076737ff73724f621ae5cef0bbfe0e8a1ab7695aaa3b07aca28acf522b7e86", ""]
     },
     "HUT": {
         "color": "orange",
-        "members": ["ff42b75d8758d93d930b5233e1acc7c897beca8a8b551d0800984fb2962308ad", "2e36df5c0359e01c637eb7de53219c14bcf69d4ba8f98dd891bbc08466a9e9d1"]
+        "members": ["ff42b75d8758d93d930b5233e1acc7c897beca8a8b551d0800984fb2962308ad", "2e36df5c0359e01c637eb7de53219c14bcf69d4ba8f98dd891bbc08466a9e9d1", "d4d227b0533cc9e08d7618f023520e18e4f0bf708a043defc3db92d400cc1a95"]
     },
     "XIQ": {
         "color": "pink",
-        "members": ["216e7921a9b39389aaad75b4e59571f4f759764d9092c526cf921f25cfff8eed", "93bea4f8a4a3971884a83d861bd1721141f0edd7c7ff22959601be245957d11d"]
+        "members": ["216e7921a9b39389aaad75b4e59571f4f759764d9092c526cf921f25cfff8eed", "93bea4f8a4a3971884a83d861bd1721141f0edd7c7ff22959601be245957d11d", "a1a2a3a22f0c4b452ff6254c82e0c351b79dbd0d46f34ee631cc4f6e7f0ed7f2"]
     },
     "ZSL": {
         "color": "yellow",
-        "members": ["0580e4651cd204935bdf05a26cd661b5ef8b178e2ad83cd4b649cdcb821d550f"]
+        "members": ["0580e4651cd204935bdf05a26cd661b5ef8b178e2ad83cd4b649cdcb821d550f", "baa5f67720766bbb6c0a27206d42d12ebb24017dca0c8b45c9f136abaf91a46a"]
     },
     "ZPR": {
         "color": "white",

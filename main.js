@@ -129,7 +129,6 @@ async function getFullLeaderboards(totalTracks = lockedTracks) {
             }
         });
     });
-
     return { playerData, WRs };
 }
 
@@ -179,12 +178,6 @@ function calculatePoints(data) {
 
 
     return playersWithPoints;
-}
-
-function calculateTeams() {
-    for (team of squads) {
-        console.log(team);
-    }
 }
 
 function switchTab(tab) {
@@ -418,6 +411,40 @@ for (let i = 1; i <= numberOfTracks; i++) {
         entry.appendChild(points);
 
         leaderboardAll.appendChild(entry);
+    });
+
+
+    const teamsWithPoints = Object.values(squads).map(team => {
+        const teamPoints = team.members.reduce((sum, userId) => {
+            const player = fullData.find(p => p.userId === userId);
+            return sum + (player ? player.points : 0);
+        }, 0);
+
+        return { team, teamPoints };
+    });
+
+    teamsWithPoints.sort((a, b) => b.teamPoints - a.teamPoints);
+
+        teamsWithPoints.forEach(({ team, teamPoints }, index) => {
+        const entry = document.createElement("div");
+        entry.className = "leaderboard-entry";
+
+        const name = document.createElement("p");
+        const teamName = Object.keys(squads).find(k => squads[k] === team);
+        name.textContent = `${index + 1}. ${teamName}`;
+        name.style.color = team.color;
+        name.style.fontSize = "25px";
+        name.style.marginLeft = "10px";
+        entry.appendChild(name);
+
+        const points = document.createElement("p");
+        points.textContent = Math.round(teamPoints * 1000) / 1000;
+        points.style.fontSize = "25px";
+        points.style.marginLeft = "auto";
+        points.style.marginRight = "10px";
+        entry.appendChild(points);
+
+        leaderboardSquads.appendChild(entry);
     });
 
 })();
