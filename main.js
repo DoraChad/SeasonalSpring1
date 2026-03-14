@@ -1,5 +1,5 @@
-import div1 from "./ids/div1.json" assert { type: "json" };
-import div2 from "./ids/div1.json" assert { type: "json" };
+const div1 = loadVariableFromGitHub("ids/div1.json");
+const div2 = loadVariableFromGitHub("ids/div2.json");
 
 const proxyURL = ["https://polyproxy.polymodloader.com/leaderboard?version=0.6.0&trackId=", "&skip=0&amount=200&onlyVerified=false"]
 const trackIds = ["76e1920a3ca015033a0b21156848def2c248c95d97ccf4aab2312a0302beefe0", "a8132c5e2df877f86572476a14b24fedc5da0892d3136b1e8f0fad33013e829a", "4058e3616fbd79b848e70037adde4f12b4413011050aaf1c9d875cdbe2e33d68", "e65c13f972d370cae9c61c5c7dd53708c9328377b7db32000ebefeb64c9687d6", "dd7b5489ba2dc8691e713d7da5e25ea631d96183a7b9919556122898badda291", "3aa3612c79907e98105d9930b28172d25df7a0930ccaf0c3f096eb4d8e42400c", "064b75893da97ced0c44841f4ef2197c4c4e8c70fe75006e7fa538dbf37feccb", "c033a1a0805db87e0f040a12af1c387dda9b86611274fc82a88d7768ac168ef3", "aa421a6e2097e73cd34c3f580a6a68793aa927c7ade5520601879c6fb25b3b4e", "8ba04773833d77c33733fad05fdfc88b238bafe6013e1377238054a19ceab7bc`"]
