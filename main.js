@@ -4,10 +4,10 @@ let squads;
 const lbButtonsArray = [];
 
 const proxyURL = ["https://polyproxy.polymodloader.com/v6/leaderboard?version=0.6.0&trackId=", "&skip=0&amount=200&onlyVerified=false"]
-const trackIds = ["76e1920a3ca015033a0b21156848def2c248c95d97ccf4aab2312a0302beefe0", "a8132c5e2df877f86572476a14b24fedc5da0892d3136b1e8f0fad33013e829a", "4058e3616fbd79b848e70037adde4f12b4413011050aaf1c9d875cdbe2e33d68", "e65c13f972d370cae9c61c5c7dd53708c9328377b7db32000ebefeb64c9687d6", "dd7b5489ba2dc8691e713d7da5e25ea631d96183a7b9919556122898badda291", "3aa3612c79907e98105d9930b28172d25df7a0930ccaf0c3f096eb4d8e42400c", "064b75893da97ced0c44841f4ef2197c4c4e8c70fe75006e7fa538dbf37feccb", "b09369279a5e461eb03e69fbeb48d43586bcbc68888936417ac751147a446431", "aa421a6e2097e73cd34c3f580a6a68793aa927c7ade5520601879c6fb25b3b4e", "8ba04773833d77c33733fad05fdfc88b238bafe6013e1377238054a19ceab7bc", "5159a8dac6a1f397407a7b5233ad570613531f6609f7dc897490c28c9f2c7a4e", "61ed688473112f5faf428bf354f687b965bcc3045e2a0bb755c832be8581e11c", "07ad4a5815d810fc2b6b2709c364b0cacc88cd5e89eb7d8b2b665bbe5307a82e", "1b3e57642a4cc4d73fa7222df4c22e4b0a13bfd7e045c9d6adc41cd7c27c399a", "7b82ed12e0ea318b9eed43ce367b587b5f7f7bc93b89d6e3acd314d402e7397a", "f82229cee55d5c8ca1fc4026e6bdee37e08a30a0a32ea02bafeee6868916fc20"]
 const numberOfTracks = 16;
 const lockedTracks = 16;
 const leaderboardTabs = ["Div 1", "Div 2", "Squads", "Unregistered"]
+const githubBase = "https://raw.githubusercontent.com/DoraChad/SeasonalSpring1/refs/heads/main/"
 const trackData = {
     names: [
         "Star Bound",
@@ -44,7 +44,26 @@ const trackData = {
         "By HummusHere",
         "By Kiki",
         "By Bruther"
+    ],
+    ids: [
+        "76e1920a3ca015033a0b21156848def2c248c95d97ccf4aab2312a0302beefe0",
+        "a8132c5e2df877f86572476a14b24fedc5da0892d3136b1e8f0fad33013e829a",
+        "4058e3616fbd79b848e70037adde4f12b4413011050aaf1c9d875cdbe2e33d68",
+        "e65c13f972d370cae9c61c5c7dd53708c9328377b7db32000ebefeb64c9687d6",
+        "dd7b5489ba2dc8691e713d7da5e25ea631d96183a7b9919556122898badda291",
+        "3aa3612c79907e98105d9930b28172d25df7a0930ccaf0c3f096eb4d8e42400c",
+        "064b75893da97ced0c44841f4ef2197c4c4e8c70fe75006e7fa538dbf37feccb",
+        "b09369279a5e461eb03e69fbeb48d43586bcbc68888936417ac751147a446431",
+        "aa421a6e2097e73cd34c3f580a6a68793aa927c7ade5520601879c6fb25b3b4e",
+        "8ba04773833d77c33733fad05fdfc88b238bafe6013e1377238054a19ceab7bc",
+        "5159a8dac6a1f397407a7b5233ad570613531f6609f7dc897490c28c9f2c7a4e",
+        "61ed688473112f5faf428bf354f687b965bcc3045e2a0bb755c832be8581e11c",
+        "07ad4a5815d810fc2b6b2709c364b0cacc88cd5e89eb7d8b2b665bbe5307a82e",
+        "1b3e57642a4cc4d73fa7222df4c22e4b0a13bfd7e045c9d6adc41cd7c27c399a",
+        "7b82ed12e0ea318b9eed43ce367b587b5f7f7bc93b89d6e3acd314d402e7397a",
+        "f82229cee55d5c8ca1fc4026e6bdee37e08a30a0a32ea02bafeee6868916fc20"
     ]
+
 };
 const calculationConstants = {
     maxPoints: 100,
@@ -64,7 +83,7 @@ const saveVariableToFile = function(data, filename = "data.json") {
 }
 
 async function loadVariableFromGitHub(url) {
-    const response = await fetch(`https://raw.githubusercontent.com/DoraChad/SeasonalSpring1/refs/heads/main/${url}`);
+    const response = await fetch(githubBase + url);
 
     if (!response.ok) {
         throw new Error(`Failed to fetch file: ${response.status}`);
@@ -91,7 +110,7 @@ function popup(message) {
 }
 
 async function copyFileToClipboard(trackNum) {
-    url = `https://raw.githubusercontent.com/DoraChad/SeasonalSpring1/refs/heads/main/tracks/${trackNum}.track`;
+    url = `${githubBase}tracks/${trackNum}.track`;
     try {
         const res = await fetch(url);
         if (!res.ok) throw new Error('Failed to fetch file');
@@ -107,7 +126,7 @@ async function copyFileToClipboard(trackNum) {
 
 
 async function fetchLeaderboard(trackNumber) {
-    const url = `${proxyURL[0]}${trackIds[trackNumber]}${proxyURL[1]}`;
+    const url = `${proxyURL[0]}${trackData.ids[trackNumber]}${proxyURL[1]}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Failed to fetch: ${url}`);
     return res.json();
@@ -322,12 +341,12 @@ for (let i = 1; i <= numberOfTracks; i++) {
 
     track.className = "track";
     if (i > lockedTracks) {
-        track.style.backgroundImage = `url("https://raw.githubusercontent.com/DoraChad/SeasonalSpring1/refs/heads/main/images/WireFrames_MapTile_Locked.jpg")`;
+        track.style.backgroundImage = `url("${githubBase}images/WireFrames_MapTile_Locked.jpg")`;
     } else {
         track.addEventListener("click", () => {
             copyFileToClipboard(i);
         });
-        track.style.backgroundImage = `url("https://raw.githubusercontent.com/DoraChad/SeasonalSpring1/refs/heads/main/images/WireFrames_MapTile_${i}.jpg")`;
+        track.style.backgroundImage = `url("${githubBase}images/WireFrames_MapTile_${i}.jpg")`;
 
         const title = document.createElement("p");
         title.textContent = trackData["names"][i-1];
