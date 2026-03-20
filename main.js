@@ -164,7 +164,7 @@ function calculatePoints(data) {
         let points = 0;
         player.placements.forEach((place, pos) => {
             if (place === null) return;
-            points += pointFormula(place, player.times[pos] / 1000, WRs[pos] / 1000);
+            points += pointFormula(place, player.times[pos], WRs[pos]);
         });
 
         playersWithPoints.push({
@@ -278,7 +278,7 @@ for (let i = 0; i < leaderboardTabs.length; i++) {
 }
 
 const leaderboardDiv1 = document.createElement("div");
-leaderboardDiv1.className = "leaderboard hidden";
+leaderboardDiv1.className = "leaderboard";
 lbDiv.appendChild(leaderboardDiv1);
 
 const leaderboardDiv2 = document.createElement("div");
@@ -290,7 +290,7 @@ leaderboardSquads.className = "leaderboard hidden";
 lbDiv.appendChild(leaderboardSquads);
 
 const leaderboardAll = document.createElement("div");
-leaderboardAll.className = "leaderboard";
+leaderboardAll.className = "leaderboard hidden";
 lbDiv.appendChild(leaderboardAll);
 
 let doubleDiv;
