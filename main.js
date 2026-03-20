@@ -19,7 +19,13 @@ const trackData = {
         "Frozen Palaces",
         "Devil's Factory",
         "Pyx",
-        "Marble Valley"
+        "Marble Valley",
+        "Apostle",
+        "Dragon's Boneyard",
+        "Castle Lake",
+        "Snowpeak Ruins",
+        "Calico Quarry",
+        "Asphodel"
     ],
     author: [
         "By Skrdh & Zihcx",
@@ -31,7 +37,13 @@ const trackData = {
         "By Blu3bolt",
         "By Herny",
         "By xav_au, hwadz & Hiksi",
-        "By Blu3bolt & Bruther"
+        "By Blu3bolt & Bruther",
+        "By BonnieBeans",
+        "By Drought",
+        "By Selver & imracer",
+        "By HummusHere",
+        "By Kiki",
+        "By Bruther"
     ]
 };
 const calculationConstants = {
@@ -318,7 +330,7 @@ for (let i = 1; i <= numberOfTracks; i++) {
         track.style.backgroundImage = `url("https://raw.githubusercontent.com/DoraChad/SeasonalSpring1/refs/heads/main/images/WireFrames_MapTile_${i}.jpg")`;
 
         const title = document.createElement("p");
-        title.textContent = trackData["names"][i];
+        title.textContent = trackData["names"][i-1];
         title.style.position = "absolute";
         title.style.fontSize = "40px";
         title.style.margin = "0";
@@ -328,7 +340,7 @@ for (let i = 1; i <= numberOfTracks; i++) {
         trackDiv.appendChild(title);
 
         const subTitle = document.createElement("p");
-        subTitle.textContent = trackData["author"][i];
+        subTitle.textContent = trackData["author"][i-1];
         subTitle.style.position = "absolute";
         subTitle.style.fontSize = "20px";
         subTitle.style.margin = "0";
